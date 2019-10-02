@@ -33,10 +33,6 @@ var effectLevelPin = imgUploadForm.querySelector('.effect-level__pin');
 var effectsItems = imgUploadForm.querySelectorAll('.effects__item');
 var effectLevelDepth = imgUploadForm.querySelector('.effect-level__depth');
 var textHashtags = imgUploadForm.querySelector('.text__hashtags');
-var minHashtagLength = 3;
-var maxHashtagLength = 50;
-var minSymbolsMessage = 'Минимальное количество символов - ' + minHashtagLength;
-var maxSymbolsMessage = 'Максимальное количество символов - ' + maxHashtagLength;
 
 var getRandomNumber = function (maxNumber) {
   return Math.floor(Math.random() * maxNumber);
@@ -46,6 +42,16 @@ var getRandomArbitrary = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 };
 
+var shuffleArray = function (array) {
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+  return array;
+};
+
 var getHashtagsList = function () {
   var textHashtagsValue = textHashtags.value;
   var hashtagsList = textHashtagsValue.split([' ']);
@@ -53,32 +59,56 @@ var getHashtagsList = function () {
   return hashtagsList;
 };
 
-var onTextHashtagsInput = function () {
-  if (textHashtags.getAttribute('minlength') === null) {
-    textHashtags.setAttribute('minlength', String(minHashtagLength));
+var setInputValidityAttributs = function (element, minLength, maxLength, required) {
+  if (element.getAttribute('minlength') === null) {
+    element.setAttribute('minlength', String(minLength));
   }
-  if (textHashtags.getAttribute('maxlength') === null) {
-    textHashtags.setAttribute('maxlength', String(maxHashtagLength));
+  if (element.getAttribute('maxlength') === null) {
+    element.setAttribute('maxlength', String(maxLength));
   }
+  if (required === true) {
+    element.setAttribute('required', '');
+  }
+};
 
-  for (var i = 0; i < getHashtagsList().length; i++) {
-    if (getHashtagsList()[i].length < minHashtagLength) {
+var onTextHashtagsInput = function () {
+  var minHashtagLength = 3;
+  var maxHashtagLength = 15;
+  var hashtagsList = getHashtagsList();
+
+  for (var i = 0; i < hashtagsList.length; i++) {
+    var hashtagLessThanSpecified = hashtagsList[i].length < minHashtagLength;
+    var hashtegMoreThenSpecified = hashtagsList[i].length > maxHashtagLength;
+
+    if (hashtagLessThanSpecified) {
       textHashtags.setCustomValidity('Слишком короткий хэштег');
+    } else if (hashtegMoreThenSpecified) {
+      textHashtags.setCustomValidity('Слишком длиннный хэштег');
     } else {
       textHashtags.setCustomValidity('');
     }
   }
 };
 
-var onTextHashtagsInvalid = function () {
-  if (textHashtags.validity.tooShort) {
-    textHashtags.setCustomValidity(minSymbolsMessage);
-  } else if (textHashtags.validity.tooLong) {
-    textHashtags.setCustomValidity(maxSymbolsMessage);
-  } else if (textHashtags.validity.customError) {
-    textHashtags.setCustomValidity('Слишком короткий хэштег');
-  } else {
-    textHashtags.setCustomValidity('');
+var onTextHashtagsInvalid = function (evt) {
+  var targetElement = evt.target;
+  var minSymbolsMessage = 'Минимальное количество символов - ' + targetElement.getAttribute('minlength');
+  var maxSymbolsMessage = 'Максимальное количество символов - ' + targetElement.getAttribute('maxlength');
+
+  if (targetElement.validity.customError) {
+    return;
+  }
+  if (targetElement.validity.tooShort) {
+    targetElement.setCustomValidity(minSymbolsMessage);
+    return;
+  }
+  if (targetElement.validity.tooLong) {
+    targetElement.setCustomValidity(maxSymbolsMessage);
+    return;
+  }
+  if (targetElement.validity.valueMissing) {
+    targetElement.setCustomValidity('Введите хэштег');
+    return;
   }
 };
 
@@ -112,6 +142,39 @@ var closePopup = function () {
   document.removeEventListener('keydown', onPopupEscPress);
 };
 
+var getPhotosNames = function () {
+  var photosNamesList = [];
+
+  for (var i = 1; i <= PHOTOS_COUNT; i++) {
+    photosNamesList.push(i);
+  }
+
+  shuffleArray(photosNamesList);
+
+  return photosNamesList;
+};
+
+var completePhotosData = function () {
+  var photosNames = getPhotosNames();
+
+  for (var i = 0; i < PHOTOS_COUNT; i++) {
+    var userAvatarNumber = getRandomArbitrary(1, 7);
+
+    photosData.push({
+      url: 'photos/' + photosNames[i] + '.jpg',
+      description: '',
+      likes: getRandomArbitrary(MIN_LIKES, MAX_LIKES + 1),
+      comments: []
+    });
+
+    photosData[i].comments.push({
+      avatar: 'img/avatar-' + userAvatarNumber + '.svg',
+      message: COMMENTS_TEXT[getRandomNumber(COMMENTS_TEXT.length)],
+      name: userNames[getRandomNumber(userNames.length)]
+    });
+  }
+};
+
 var renderPicture = function (photoIndex, parrent) {
   var pictureTemplate = document.querySelector('#picture')
   .content
@@ -127,42 +190,35 @@ var renderPicture = function (photoIndex, parrent) {
   return picture;
 };
 
-// Заполняем массив photosData
-for (var photosDataI = 0; photosDataI < PHOTOS_COUNT; photosDataI++) {
-  var userAvatarNumber = getRandomArbitrary(1, 7);
+var addPhotosInPhotosGalleryFragment = function () {
+  for (var i = 0; i < PHOTOS_COUNT; i++) {
+    renderPicture(i, photosGalleryFragment);
+  }
+};
 
-  photosData.push({
-    url: 'photos/' + getRandomArbitrary(1, PHOTOS_COUNT + 1) + '.jpg',
-    description: '',
-    likes: getRandomArbitrary(MIN_LIKES, MAX_LIKES + 1),
-    comments: []
-  });
-
-  photosData[photosDataI].comments.push({
-    avatar: 'img/avatar-' + userAvatarNumber + '.svg',
-    message: COMMENTS_TEXT[getRandomNumber(COMMENTS_TEXT.length)],
-    name: userNames[getRandomNumber(userNames.length)]
-  });
-}
-
+var addMouseupEventForEffectsItems = function () {
+  for (var i = 0; i < effectsItems.length; i++) {
+    effectsItems[i].addEventListener('mouseup', function () {
+      onEffectsItemsMouseup();
+    });
+  }
+};
+//  Заполняем PhotosData
+completePhotosData();
 //  Добавляем галерею фотографий в photosGalleryFragment
-for (var photoI = 0; photoI < PHOTOS_COUNT; photoI++) {
-  renderPicture(photoI, photosGalleryFragment);
-}
+addPhotosInPhotosGalleryFragment();
 //  Отрисовываем галерею фотографий
 photosGallery.appendChild(photosGalleryFragment);
 //  Показываем форму редактирования изображения при изменении значения #upload-file
 uploadFileInput.addEventListener('change', openPopup);
-//  Закрываем форму редактирования изображения при клике на крестик
+//  Закрываем форму редактирования изображения при клике на крестик и ESC
 imgUploadCancel.addEventListener('click', closePopup);
 //  Изменяем ширину индикатора глубины эффекта под положение пина
 effectLevelPin.addEventListener('mouseup', associateEffectPinWithEffectDepth);
-//  Сбрасываем глубину наложенного эффекта на 0% при mouseup на превью эффекта
-for (var effectsItemsI = 0; effectsItemsI < effectsItems.length; effectsItemsI++) {
-  effectsItems[effectsItemsI].addEventListener('mouseup', function () {
-    onEffectsItemsMouseup();
-  });
-}
-
+//  Проверяем наличие атрибутов минимальной и максимальной длины у textHashtags
+setInputValidityAttributs(textHashtags, 3, 50, true);
+// Проводим валидацию textHashtags
 textHashtags.addEventListener('invalid', onTextHashtagsInvalid);
 textHashtags.addEventListener('input', onTextHashtagsInput);
+//  Сбрасываем глубину наложенного эффекта на 0% при mouseup на превью эффекта
+addMouseupEventForEffectsItems();
