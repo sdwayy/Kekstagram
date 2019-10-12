@@ -33,7 +33,7 @@
     }
   };
 
-  var setPopupLogic = function (element, popupClosed) {
+  var setOpenCloseLogic = function (element, popupClosed) {
     var openPopup = function () {
       element.classList.remove('hidden');
 
@@ -59,12 +59,22 @@
     }
   };
 
+  var convertProcentString = function (procent) {
+    return Number(procent.slice(0, -1));
+  };
+
+  var convertPxString = function (pxCount) {
+    return Number(pxCount.slice(0, -2));
+  };
+
   window.util = {
     ESC_KEYCODE: ESC_KEYCODE,
     getRandomNumber: getRandomNumber,
     getRandomArbitrary: getRandomArbitrary,
     shuffleArray: shuffleArray,
     setInputValidityAttributs: setInputValidityAttributs,
-    setPopupLogic: setPopupLogic,
+    setOpenCloseLogic: setOpenCloseLogic,
+    convertProcentString: convertProcentString,
+    convertPxString: convertPxString,
   };
 })();
