@@ -20,9 +20,6 @@
     var setEffect = function () {
       for (var i = 0; i < effectsRadio.length; i++) {
         switch (document.activeElement) {
-          case effectsRadio[0]:
-            effectPreview.removeAttribute('style');
-            break;
           case effectsRadio[1]:
             effectName = 'grayscale';
             effectValue = effectDecimalValue;
@@ -44,6 +41,9 @@
           case effectsRadio[5]:
             effectName = 'brightness';
             effectValue = brightnessValue;
+            break;
+          default:
+            effectPreview.removeAttribute('style');
         }
       }
     };
