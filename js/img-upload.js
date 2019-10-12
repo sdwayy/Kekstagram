@@ -55,7 +55,9 @@
     }
   };
   //  Показываем форму редактирования изображения при изменении значения #upload-file
-  uploadFileInput.addEventListener('change', window.util.setOpenCloseLogic(imgUploadOverlay, true));
+  uploadFileInput.addEventListener('change', function () {
+    window.util.setOpenCloseLogic(imgUploadOverlay, true);
+  });
   //  Закрываем форму редактирования изображения при клике на крестик и ESC
   imgUploadCancel.addEventListener('click', function () {
     uploadFileInput.value = null;

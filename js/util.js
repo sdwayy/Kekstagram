@@ -67,10 +67,6 @@
     return Number(pxCount.slice(0, -2));
   };
 
-  var convertNumberToDecimal = function (number) {
-    return number / 100;
-  };
-
   window.util = {
     ESC_KEYCODE: ESC_KEYCODE,
     getRandomNumber: getRandomNumber,
@@ -80,6 +76,5 @@
     setOpenCloseLogic: setOpenCloseLogic,
     convertProcentString: convertProcentString,
     convertPxString: convertPxString,
-    convertNumberToDecimal: convertNumberToDecimal,
   };
 })();

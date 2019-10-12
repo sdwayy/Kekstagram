@@ -11,38 +11,40 @@
   var setFilterStyle = function (effectValue) {
     var effectName;
     var blurMultiplier = 5;
-    var brightnessMultiplier = 10;
+    var brightnessMultiplier = 15;
     var brightnessStartPoint = 1;
+    var effectDecimalValue = effectValue / 100;
+    var blurValue = effectValue / blurMultiplier + 'px';
+    var brightnessValue = brightnessStartPoint + effectValue / brightnessMultiplier;
 
     var setEffect = function () {
-      if (effectsRadio[0] === document.activeElement) {
-        effectPreview.removeAttribute('style');
-        return;
-      }
-      if (effectsRadio[1] === document.activeElement) {
-        effectName = 'grayscale';
-        effectValue = window.util.convertNumberToDecimal(effectValue);
-        return;
-      }
-      if (effectsRadio[2] === document.activeElement) {
-        effectName = 'sepia';
-        effectValue = window.util.convertNumberToDecimal(effectValue);
-        return;
-      }
-      if (effectsRadio[3] === document.activeElement) {
-        effectName = 'invert';
-        effectValue = window.util.convertNumberToDecimal(effectValue);
-        return;
-      }
-      if (effectsRadio[4] === document.activeElement) {
-        effectName = 'blur';
-        effectValue = effectValue / blurMultiplier + 'px';
-        return;
-      }
-      if (effectsRadio[5] === document.activeElement) {
-        effectName = 'brightness';
-        effectValue = brightnessStartPoint + effectValue / brightnessMultiplier;
-        return;
+      for (var i = 0; i < effectsRadio.length; i++) {
+        switch (document.activeElement) {
+          case effectsRadio[0]:
+            effectPreview.removeAttribute('style');
+            break;
+          case effectsRadio[1]:
+            effectName = 'grayscale';
+            effectValue = effectDecimalValue;
+            break;
+          case effectsRadio[2]:
+            effectName = 'sepia';
+            effectValue = effectDecimalValue;
+            break;
+          case effectsRadio[3]:
+            effectName = 'invert';
+            effectValue = effectDecimalValue;
+            break;
+          case effectsRadio[4]:
+            effectName = 'blur';
+            if (effectValue > 0) {
+              effectValue = blurValue;
+            }
+            break;
+          case effectsRadio[5]:
+            effectName = 'brightness';
+            effectValue = brightnessValue;
+        }
       }
     };
 
