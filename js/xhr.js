@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  window.load = function (url, onSuccess, onError) {
+  window.xhrRequest = function (xhrType, url, onSuccess, onError, sendData) {
     var xhr = new XMLHttpRequest();
 
     var getResponse = function () {
@@ -38,7 +38,7 @@
 
     xhr.responseType = 'json';
     xhr.timeout = 10000;
-    xhr.open('GET', url);
-    xhr.send();
+    xhr.open(xhrType, url);
+    xhr.send(sendData);
   };
 })();

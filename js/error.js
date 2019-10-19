@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  window.renderError = function (parent, errorDescription, errorType) {
+  var renderError = function (parent, errorDescription, errorType) {
     var errorWindowTemplate = document.querySelector('#error')
     .content
     .querySelector('.error');
@@ -29,5 +29,13 @@
 
     parent.appendChild(errorWindow);
 
+  };
+
+  window.onError = function (errorDiscription, errorType) {
+    if (errorType === 'galleryError') {
+      renderError(window.pageMain, errorDiscription, 'galleryError');
+    } else {
+      renderError(window.pageMain, errorDiscription);
+    }
   };
 })();

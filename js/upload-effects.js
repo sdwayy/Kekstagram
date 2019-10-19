@@ -106,12 +106,13 @@
   effectLevelPin.addEventListener('mousedown', onPinMouseDown);
   resetSlider();
 
-  window.uploadSlider = {
-    effectLevelPin: effectLevelPin,
-    effectLevelDepth: effectLevelDepth,
-  };
-
   for (var i = 0; i < effectsRadio.length; i++) {
     effectsRadio[i].addEventListener('click', onEffectsItemClick);
   }
+
+  window.uploadSlider = {
+    effectLevelPin: effectLevelPin,
+    effectLevelDepth: effectLevelDepth,
+    resetSlider: resetSlider,
+  };
 })();
