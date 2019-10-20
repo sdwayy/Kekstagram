@@ -15,8 +15,8 @@
     photosGallery.appendChild(photosGalleryFragment);
   };
 
-  var onPhotosDataError = function (errorDiscription) {
-    window.onError(errorDiscription, 'galleryError');
+  var onPhotosDataError = function (errorDescription) {
+    window.renderError(errorDescription);
   };
 
   window.xhrRequest('GET', 'https://js.dump.academy/kekstagram/data', onPhotosDataSuccess, onPhotosDataError);

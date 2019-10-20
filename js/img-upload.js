@@ -6,6 +6,7 @@
   var imgUploadOverlay = imgUploadForm.querySelector('.img-upload__overlay');
   var imgUploadCancel = imgUploadForm.querySelector('.img-upload__cancel');
   var textHashtags = imgUploadForm.querySelector('.text__hashtags');
+  var imgUploadText = imgUploadForm.querySelector('.img-upload__text');
 
   var getHashtagsList = function () {
     var textHashtagsValue = textHashtags.value;
@@ -55,13 +56,29 @@
     }
   };
 
+  var resetImgUploadValues = function () {
+    imgUploadOverlay.classList.add('hidden');
+    window.uploadEffects.resetSlider();
+    window.uploadEffects.effectsRadio[0].checked = true;
+    uploadFileInput.value = null;
+
+    for (var i = 0; i < imgUploadText.children.length; i++) {
+      imgUploadText.children[i].value = null;
+    }
+  };
+
   var onSumbitSuccess = function () {
-    imgUploadForm.classList.add('hidden');
-    window.uploadSlider.resetSlider();
+    resetImgUploadValues();
+    window.renderSuccessWindow();
+  };
+
+  var onSubmitError = function (errorDescription) {
+    imgUploadOverlay.classList.add('hidden');
+    window.renderError(errorDescription, 'submitError');
   };
 
   var onFormSubmit = function () {
-    window.xhrRequest('POST', 'https://js.dump.academy/kekstagram', onSumbitSuccess, window.onError, new FormData(imgUploadForm));
+    window.xhrRequest('POST', 'https://js.dump.academy/kekstagram', onSumbitSuccess, onSubmitError, new FormData(imgUploadForm));
   };
   //  Показываем форму редактирования изображения при изменении значения #upload-file
   uploadFileInput.addEventListener('change', function () {
@@ -84,6 +101,9 @@
   });
 
   window.imgUpload = {
+    uploadFileInput: uploadFileInput,
+    imgUploadOverlay: imgUploadOverlay,
     imgUploadForm: imgUploadForm,
+    resetImgUploadValues: resetImgUploadValues,
   };
 })();

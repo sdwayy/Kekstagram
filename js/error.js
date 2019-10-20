@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var renderError = function (parent, errorDescription, errorType) {
+  window.renderError = function (errorDescription, itSubmitError) {
     var errorWindowTemplate = document.querySelector('#error')
     .content
     .querySelector('.error');
@@ -10,32 +10,17 @@
     var errorText = errorDescription;
     var buttons = errorWindow.querySelector('.error__buttons');
     var retryButton = buttons.children[0];
-    var secondButton = buttons.children[1];
+    var closeButton = buttons.children[1];
 
-    var onRetryButton = function () {
-      window.location.reload();
-    };
-
-    retryButton.addEventListener('click', onRetryButton);
+    retryButton.textContent = 'Все понятно';
+    buttons.removeChild(closeButton);
     errorTitle.textContent = errorText;
+    window.pageMain.appendChild(errorWindow);
 
-    if (errorType === 'galleryError') {
-      secondButton.textContent = 'Закрыть окно';
-
-      secondButton.addEventListener('click', function () {
-        errorWindow.style.display = 'none';
-      });
-    }
-
-    parent.appendChild(errorWindow);
-
-  };
-
-  window.onError = function (errorDiscription, errorType) {
-    if (errorType === 'galleryError') {
-      renderError(window.pageMain, errorDiscription, 'galleryError');
+    if (itSubmitError) {
+      window.util.setNotifyLogic(errorWindow, itSubmitError);
     } else {
-      renderError(window.pageMain, errorDiscription);
+      window.util.setNotifyLogic(errorWindow);
     }
   };
 })();
