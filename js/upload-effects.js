@@ -111,7 +111,7 @@
   }
 
   resetSlider();
-  
+
   window.uploadEffects = {
     effectPreview: effectPreview,
     resetSlider: resetSlider,
