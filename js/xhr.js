@@ -6,24 +6,32 @@
 
     var getResponse = function () {
       try {
-        onSuccess(xhr.response);
+        if (xhr.status === 200) {
+          onSuccess(xhr.response);
+        } else {
+          throw new Error('Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText);
+        }
       } catch (err) {
         var errorDescription;
         var errorText = 'Ошибка ' + xhr.status + ':';
 
         switch (xhr.status) {
           case 400:
-            errorDescription = errorText + ' Неверный запрос';
+            errorDescription = errorText + ' Некорректные данные';
             break;
+
           case 401:
             errorDescription = errorText + ' Пользователь не авторизован';
             break;
+
           case 404:
-            errorDescription = errorText + ' Ничего не найдено';
+            errorDescription = errorText + ' Некорректный запрос';
             break;
+
           case 522:
             errorDescription = errorText + ' Превышено время ожидания';
             break;
+
           default:
             errorDescription = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
         }
@@ -35,7 +43,6 @@
     };
 
     xhr.addEventListener('load', getResponse);
-
     xhr.responseType = 'json';
     xhr.timeout = 10000;
     xhr.open(xhrType, url);

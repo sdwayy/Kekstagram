@@ -56,6 +56,7 @@
   var resetSlider = function () {
     effectLevelDepth.style.width = 0;
     effectLevelPin.style.left = 0;
+    effectPreview.removeAttribute('style');
   };
 
   var onEffectsItemClick = function () {
@@ -104,15 +105,16 @@
   };
 
   effectLevelPin.addEventListener('mousedown', onPinMouseDown);
-  resetSlider();
 
   for (var i = 0; i < effectsRadio.length; i++) {
     effectsRadio[i].addEventListener('click', onEffectsItemClick);
   }
 
-  window.uploadSlider = {
-    effectLevelPin: effectLevelPin,
-    effectLevelDepth: effectLevelDepth,
+  resetSlider();
+  
+  window.uploadEffects = {
+    effectPreview: effectPreview,
     resetSlider: resetSlider,
+    effectsRadio: effectsRadio,
   };
 })();

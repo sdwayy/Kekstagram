@@ -67,6 +67,35 @@
     return Number(pxCount.slice(0, -2));
   };
 
+  var delElement = function (parent, element) {
+    parent.removeChild(element);
+  };
+
+  var setNotifyLogic = function (notifyName, itSubmitError) {
+    var closeNotifyOnClick = function () {
+      delElement(window.pageMain, notifyName);
+      document.removeEventListener('click', closeNotifyOnClick);
+      document.removeEventListener('keydown', closeNotifyOnEsc);
+
+      if (itSubmitError) {
+        window.imgUpload.imgUploadOverlay.classList.remove('hidden');
+      }
+    };
+
+    var closeNotifyOnEsc = function (evt) {
+      if (evt.keyCode === ESC_KEYCODE) {
+        closeNotifyOnClick();
+      }
+    };
+
+    var setListeners = function () {
+      document.addEventListener('click', closeNotifyOnClick);
+      document.addEventListener('keydown', closeNotifyOnEsc);
+    };
+
+    return setListeners();
+  };
+
   window.util = {
     ESC_KEYCODE: ESC_KEYCODE,
     getRandomNumber: getRandomNumber,
@@ -76,5 +105,7 @@
     setOpenCloseLogic: setOpenCloseLogic,
     convertProcentString: convertProcentString,
     convertPxString: convertPxString,
+    delElement: delElement,
+    setNotifyLogic: setNotifyLogic,
   };
 })();
