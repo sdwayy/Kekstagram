@@ -73,7 +73,7 @@
 
   var setNotifyLogic = function (notifyName, itSubmitError) {
     var closeNotifyOnClick = function () {
-      delElement(window.pageMain, notifyName);
+      delElement(window.mainGallery.pageMain, notifyName);
       document.removeEventListener('click', closeNotifyOnClick);
       document.removeEventListener('keydown', closeNotifyOnEsc);
 

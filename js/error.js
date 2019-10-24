@@ -15,7 +15,7 @@
     retryButton.textContent = 'Все понятно';
     buttons.removeChild(closeButton);
     errorTitle.textContent = errorText;
-    window.pageMain.appendChild(errorWindow);
+    window.mainGallery.pageMain.appendChild(errorWindow);
 
     if (itSubmitError) {
       window.util.setNotifyLogic(errorWindow, itSubmitError);

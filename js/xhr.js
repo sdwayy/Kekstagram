@@ -9,7 +9,7 @@
         if (xhr.status === 200) {
           onSuccess(xhr.response);
         } else {
-          throw new Error('Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText);
+          throw new Error('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
         }
       } catch (err) {
         var errorDescription;
@@ -33,7 +33,7 @@
             break;
 
           default:
-            errorDescription = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
+            errorDescription = 'Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText;
         }
 
         if (errorDescription !== undefined) {
