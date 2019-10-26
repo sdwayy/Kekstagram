@@ -92,6 +92,8 @@
         onFilterBtnClick(target, mainPhotosData);
       });
     });
+
+    window.makeBigPictureData(photosData, 0, 0);
   };
 
 
