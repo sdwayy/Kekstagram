@@ -16,44 +16,43 @@
     target.classList.add('img-filters__button--active');
   };
 
-  var getPhotosData = function (mainPhotosData) {
-    var photosData;
+  var photosData;
+
+  var getPhotosData = function (data) {
     var activeBtn = photosFilter.querySelector('.img-filters__button--active');
 
     var filterRandom = function () {
-      var randomPhotos = mainPhotosData.slice();
+      photosData = data.slice();
 
-      window.util.shuffleArray(randomPhotos);
-      randomPhotos.splice(10, randomPhotos.length);
-
-      return randomPhotos;
+      window.util.shuffleArray(photosData);
+      photosData.splice(10, photosData.length);
     };
 
     var filterDiscussed = function () {
-      var filterPhotosByLikes = mainPhotosData
+      photosData = data
         .slice()
         .sort(function (a, b) {
           return b.likes - a.likes;
         });
-      return filterPhotosByLikes;
     };
 
     switch (activeBtn) {
       case randomFilterBtn:
-        photosData = filterRandom();
+        filterRandom();
         break;
       case discussedFilterBtn:
-        photosData = filterDiscussed();
+        filterDiscussed();
         break;
       default:
-        photosData = mainPhotosData;
+        photosData = data;
     }
+
     return photosData;
   };
 
-  var renderPhotosData = function (photosData) {
-    for (var i = 0; i < photosData.length; i++) {
-      window.renderPhoto(photosData, i, photosGalleryFragment);
+  var renderPhotosData = function (data) {
+    for (var i = 0; i < data.length; i++) {
+      window.renderPhoto(data, i, photosGalleryFragment);
     }
 
     photosGallery.appendChild(photosGalleryFragment);
@@ -67,19 +66,22 @@
     }
   };
 
-  var rendeNewPhotos = window.debounce(function (photosData) {
+  var renderNewPhotos = window.debounce(function (data) {
     deleteAddedPhotos();
-    renderPhotosData(getPhotosData(photosData));
+    renderPhotosData(data);
   });
 
-  var onFilterBtnClick = function (target, photosData) {
+  var onFilterBtnClick = function (target, mainPhotosData) {
     toggleFilterBtnActiveClass(target);
-    rendeNewPhotos(photosData);
+    renderNewPhotos(getPhotosData(mainPhotosData));
+    window.mainGallery.photosData = photosData;
   };
 
-  var onPhotosDataSuccess = function (data) {
-    var mainPhotosData = Array.from(data);
+  var onPhotosDataSuccess = function (backendData) {
+    var mainPhotosData = Array.from(backendData);
 
+    photosData = mainPhotosData;
+    window.mainGallery.photosData = photosData;
     renderPhotosData(mainPhotosData);
     photosFilter.classList.remove('img-filters--inactive');
 
@@ -90,6 +92,8 @@
         onFilterBtnClick(target, mainPhotosData);
       });
     });
+
+    window.makeBigPictureData(photosData, 0, 0);
   };
 
 
@@ -99,9 +103,8 @@
 
   window.xhrRequest('GET', 'https://js.dump.academy/kekstagram/data', onPhotosDataSuccess, onPhotosDataError);
 
-
   window.mainGallery = {
     pageMain: pageMain,
-    getPhotosData: getPhotosData,
+    photosData: photosData,
   };
 })();
