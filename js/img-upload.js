@@ -82,12 +82,12 @@
   };
   //  Показываем форму редактирования изображения при изменении значения #upload-file
   uploadFileInput.addEventListener('change', function () {
-    window.util.setOpenCloseLogic(imgUploadOverlay, true);
+    window.setOpenCloseLogic(imgUploadOverlay, undefined, true);
   });
   //  Закрываем форму редактирования изображения при клике на крестик и ESC
   imgUploadCancel.addEventListener('click', function () {
     uploadFileInput.value = null;
-    window.util.setOpenCloseLogic(imgUploadOverlay, false);
+    window.setOpenCloseLogic(imgUploadOverlay);
   });
   //  Проверяем наличие атрибутов минимальной и максимальной  длины у textHashtags
   window.util.setInputValidityAttributs(textHashtags, 3, 50, true);

@@ -33,7 +33,7 @@
             break;
 
           default:
-            errorDescription = 'Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText;
+            errorDescription = 'Что-то пошло не так. Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText;
         }
 
         if (errorDescription !== undefined) {

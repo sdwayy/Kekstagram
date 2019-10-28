@@ -2,6 +2,7 @@
 
 (function () {
   var ESC_KEYCODE = 27;
+  var ENTER_KEYCODE = 13;
 
   var getRandomNumber = function (maxNumber) {
     return Math.floor(Math.random() * maxNumber);
@@ -30,32 +31,6 @@
     }
     if (required === true) {
       element.setAttribute('required', '');
-    }
-  };
-
-  var setOpenCloseLogic = function (element, popupClosed) {
-    var openPopup = function () {
-      element.classList.remove('hidden');
-
-      document.addEventListener('keydown', onPopupEscPress);
-    };
-
-    var closePopup = function () {
-      element.classList.add('hidden');
-
-      document.removeEventListener('keydown', onPopupEscPress);
-    };
-
-    var onPopupEscPress = function (evt) {
-      if (evt.keyCode === ESC_KEYCODE) {
-        closePopup(element);
-      }
-    };
-
-    if (popupClosed) {
-      return openPopup();
-    } else {
-      return closePopup();
     }
   };
 
@@ -98,11 +73,11 @@
 
   window.util = {
     ESC_KEYCODE: ESC_KEYCODE,
+    ENTER_KEYCODE: ENTER_KEYCODE,
     getRandomNumber: getRandomNumber,
     getRandomArbitrary: getRandomArbitrary,
     shuffleArray: shuffleArray,
     setInputValidityAttributs: setInputValidityAttributs,
-    setOpenCloseLogic: setOpenCloseLogic,
     convertProcentString: convertProcentString,
     convertPxString: convertPxString,
     delElement: delElement,
