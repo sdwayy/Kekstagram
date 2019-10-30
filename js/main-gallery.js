@@ -10,6 +10,7 @@
   var discussedFilterBtn = photosFilter.querySelector('#filter-discussed');
   var photosData;
   var renderedPhotos;
+  var photoObject;
 
   var getRenderedPhotos = function () {
     return photosGallery.querySelectorAll('.picture');
@@ -36,7 +37,7 @@
       photosData = data
         .slice()
         .sort(function (a, b) {
-          return b.likes - a.likes;
+          return b.comments.length - a.comments.length;
         });
     };
 
@@ -65,9 +66,25 @@
     renderedPhotos.forEach(function (photo) {
       photo.addEventListener('click', function (evt) {
         evt.preventDefault();
-        window.setOpenCloseLogic(window.bigPicture.popup, window.bigPicture.commentInput, true);
+
+        var target = evt.target.classList.contains('picture__img') ?
+          evt.target :
+          evt.target.children[0];
+
+        onPhotosClick(target);
       });
     });
+  };
+
+  var onPhotosClick = function (target) {
+    photoObject = photosData.filter(function (item) {
+      return item.url === target.src.slice(22);
+    })[0];
+
+    window.bigPicture.makeBigPictureData(photoObject);
+    window.mainGallery.photoObject = photoObject;
+
+    window.setOpenCloseLogic(window.bigPicture.popup, [window.bigPicture.commentInput], true);
   };
 
   var deleteAddedPhotos = function () {
@@ -104,8 +121,6 @@
         onFilterBtnClick(target, mainPhotosData);
       });
     });
-
-    window.bigPicture.makeBigPictureData(photosData, 0, 0);
   };
 
 
@@ -118,5 +133,6 @@
   window.mainGallery = {
     pageMain: pageMain,
     photosData: photosData,
+    photoObject: photoObject,
   };
 })();

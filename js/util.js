@@ -53,7 +53,7 @@
       document.removeEventListener('keydown', closeNotifyOnEsc);
 
       if (itSubmitError) {
-        window.imgUpload.imgUploadOverlay.classList.remove('hidden');
+        window.imgUpload.overlay.classList.remove('hidden');
       }
     };
 
@@ -71,6 +71,23 @@
     return setListeners();
   };
 
+  var setVisabilityForElements = function (elements, hide) {
+    var hideElements = function () {
+      elements.forEach(function (element) {
+        element.classList.add('visually-hidden');
+      });
+    };
+
+    var showElements = function () {
+      elements.forEach(function (element) {
+        element.classList.remove('visually-hidden');
+      });
+    };
+
+    var result = hide ? hideElements() : showElements();
+
+    return result;
+  };
   window.util = {
     ESC_KEYCODE: ESC_KEYCODE,
     ENTER_KEYCODE: ENTER_KEYCODE,
@@ -82,5 +99,6 @@
     convertPxString: convertPxString,
     delElement: delElement,
     setNotifyLogic: setNotifyLogic,
+    setVisabilityForElements: setVisabilityForElements,
   };
 })();

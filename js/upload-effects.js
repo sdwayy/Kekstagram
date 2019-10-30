@@ -5,8 +5,8 @@
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
   var effectLevelLine = effectLevel.querySelector('.effect-level__line');
   var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
-  var effectsRadio = window.imgUpload.imgUploadForm.querySelectorAll('.effects__radio');
-  var effectPreview = window.imgUpload.imgUploadForm.querySelector('.img-upload__preview').children[0];
+  var effectsRadio = window.imgUpload.form.querySelectorAll('.effects__radio');
+  var effectPreview = window.imgUpload.form.querySelector('.img-upload__preview').children[0];
 
   var setFilterStyle = function (effectValue) {
     var effectName;
@@ -52,14 +52,22 @@
     effectPreview.style.filter = effectName + '(' + effectValue + ')';
   };
 
-
   var resetSlider = function () {
     effectLevelDepth.style.width = 0;
     effectLevelPin.style.left = 0;
     effectPreview.removeAttribute('style');
   };
 
-  var onEffectsItemClick = function () {
+  var onEffectsItemClick = function (evt) {
+    var target = evt.target;
+
+    if (target !== effectsRadio[0]) {
+      effectLevel.classList.remove('hidden');
+    } else {
+      effectLevel.classList.add('hidden');
+    }
+
+    window.imgUpload.resetScaleValue();
     resetSlider();
     setFilterStyle(0);
   };
@@ -104,6 +112,7 @@
     document.addEventListener('mouseup', onPinMouseUp);
   };
 
+  effectLevel.classList.add('hidden');
   effectLevelPin.addEventListener('mousedown', onPinMouseDown);
 
   for (var i = 0; i < effectsRadio.length; i++) {
