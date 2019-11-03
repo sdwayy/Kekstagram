@@ -35,10 +35,10 @@
       }
     };
 
-    if (popupClosed) {
-      openPopup();
-    } else {
+    var openCloseLogic = popupClosed ?
+      openPopup() :
       closePopup();
-    }
+
+    return openCloseLogic;
   };
 })();

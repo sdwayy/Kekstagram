@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var COMMENTS_LOADER_MULTIPLIER = 5;
+
   var popup = document.querySelector('.big-picture');
   var img = popup.querySelector('.big-picture__img').children[0];
   var likesCount = popup.querySelector('.likes-count');
@@ -12,26 +14,62 @@
   var commentInput = popup.querySelector('.social__footer-text');
   var socialComment = socialComments.children[0];
 
-  var makeBigPictureData = function (object) {
-    img.src = object.url;
-    likesCount.textContent = object.likes;
-    socialCaption.textContent = object.description;
+  var photoObject;
+  var totalComments;
+  var commentsCount;
+
+  var getCommentsCount = function () {
+    return socialComments.children.length;
+  };
+
+  var hideUndueInterface = function () {
+    var undueInterfaceList = [
+      commentsLoader,
+      socialCommentCount,
+    ];
+
+    return window.util.setVisabilityForElements(undueInterfaceList, 'hide');
+  };
+
+  var generateCommentCountMessage = function () {
+    socialCommentCount.textContent = commentsCount + ' из ' + totalComments + ' комментaриев';
+  };
+
+  var makeData = function (object) {
+    photoObject = object;
+    totalComments = photoObject.comments.length;
+
+    img.src = photoObject.url;
+    likesCount.textContent = photoObject.likes;
+    socialCaption.textContent = photoObject.description;
     socialComments.innerHTML = '';
 
-    if (object.comments.length < 5) {
-      window.util.setVisabilityForElements([commentsLoader, socialCommentCount], 'hide');
-      renderComments(object, 0, object.comments.length);
+    if (totalComments < COMMENTS_LOADER_MULTIPLIER) {
+      // Если комментариев <5 скрываем лишнее и показываем все комментарии
+      hideUndueInterface();
+      renderComments(photoObject, 0, totalComments);
     } else {
+      // Иначе показываем все детали интерфейса и показываем первые 5 комментариев
       window.util.setVisabilityForElements([commentsLoader, socialCommentCount]);
-      renderComments(object, 0, 5);
+
+      renderComments(photoObject, 0, COMMENTS_LOADER_MULTIPLIER);
+
+      commentsCount = COMMENTS_LOADER_MULTIPLIER;
     }
 
-    socialCommentCount.textContent = socialComments.children.length + ' из ' + object.comments.length + ' комментaриев';
+    generateCommentCountMessage();
   };
 
   var onCommentsLoaderClick = function () {
-    window.util.setVisabilityForElements([commentsLoader, socialCommentCount], 'hide');
-    renderComments(window.mainGallery.photoObject, 5, window.mainGallery.photoObject.comments.length);
+    if (commentsCount + COMMENTS_LOADER_MULTIPLIER < totalComments) {
+      renderComments(photoObject, commentsCount, commentsCount + COMMENTS_LOADER_MULTIPLIER);
+    } else {
+      hideUndueInterface();
+      renderComments(photoObject, commentsCount, totalComments);
+    }
+
+    commentsCount = getCommentsCount();
+    generateCommentCountMessage();
   };
 
   var renderComments = function (object, commentStart, commentEnd) {
@@ -62,7 +100,7 @@
 
   window.bigPicture = {
     popup: popup,
-    makeBigPictureData: makeBigPictureData,
+    makeData: makeData,
     commentInput: commentInput,
   };
 })();

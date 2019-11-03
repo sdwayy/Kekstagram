@@ -3,6 +3,7 @@
 (function () {
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
+  var PICTURE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
   var getRandomNumber = function (maxNumber) {
     return Math.floor(Math.random() * maxNumber);
@@ -89,6 +90,7 @@
     return result;
   };
   window.util = {
+    PICTURE_TYPES: PICTURE_TYPES,
     ESC_KEYCODE: ESC_KEYCODE,
     ENTER_KEYCODE: ENTER_KEYCODE,
     getRandomNumber: getRandomNumber,

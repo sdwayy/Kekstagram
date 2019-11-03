@@ -1,53 +1,58 @@
 'use strict';
 
 (function () {
+  var BLUR_MULTIPLIER = 5;
+  var BRIGHTNESS_MULTIPLIER = 15;
+  var BRIGHTNESS_START_POINT = 1;
+
   var effectLevel = document.querySelector('.effect-level');
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
   var effectLevelLine = effectLevel.querySelector('.effect-level__line');
   var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
   var effectsRadio = window.imgUpload.form.querySelectorAll('.effects__radio');
-  var effectPreview = window.imgUpload.form.querySelector('.img-upload__preview').children[0];
+  var effectPreview = window.imgUpload.preview;
 
   var setFilterStyle = function (effectValue) {
     var effectName;
-    var blurMultiplier = 5;
-    var brightnessMultiplier = 15;
-    var brightnessStartPoint = 1;
-    var effectDecimalValue = effectValue / 100;
-    var blurValue = effectValue / blurMultiplier + 'px';
-    var brightnessValue = brightnessStartPoint + effectValue / brightnessMultiplier;
+    var blurValue = effectValue / BLUR_MULTIPLIER + 'px';
+    var brightnessValue = BRIGHTNESS_START_POINT + effectValue / BRIGHTNESS_MULTIPLIER;
 
     var setEffect = function () {
       for (var i = 0; i < effectsRadio.length; i++) {
         switch (document.activeElement) {
           case effectsRadio[1]:
             effectName = 'grayscale';
-            effectValue = effectDecimalValue;
             break;
+
           case effectsRadio[2]:
             effectName = 'sepia';
-            effectValue = effectDecimalValue;
             break;
+
           case effectsRadio[3]:
             effectName = 'invert';
-            effectValue = effectDecimalValue;
             break;
+
           case effectsRadio[4]:
             effectName = 'blur';
+
             if (effectValue > 0) {
               effectValue = blurValue;
             }
+
             break;
+
           case effectsRadio[5]:
             effectName = 'brightness';
             effectValue = brightnessValue;
             break;
+
           default:
             effectPreview.removeAttribute('style');
         }
       }
     };
 
+    effectValue /= 100;
     setEffect();
     effectPreview.style.filter = effectName + '(' + effectValue + ')';
   };
@@ -69,7 +74,7 @@
 
     window.imgUpload.resetScaleValue();
     resetSlider();
-    setFilterStyle(0);
+    setFilterStyle();
   };
 
   var onPinMouseDown = function (evt) {
@@ -115,9 +120,9 @@
   effectLevel.classList.add('hidden');
   effectLevelPin.addEventListener('mousedown', onPinMouseDown);
 
-  for (var i = 0; i < effectsRadio.length; i++) {
-    effectsRadio[i].addEventListener('click', onEffectsItemClick);
-  }
+  effectsRadio.forEach(function (effectRadio) {
+    effectRadio.addEventListener('click', onEffectsItemClick);
+  });
 
   resetSlider();
 

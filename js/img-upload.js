@@ -2,8 +2,12 @@
 
 (function () {
   var DEFAULT_SCALE_VALUE = 100 + '%';
+  var SCALE_MULTIPLIER = 25;
+  var MIN_HASHTAG_LENGTH = 2;
+  var MAX_HASHTAG_LENGTH = 20;
 
   var imgUpload = document.querySelector('.img-upload');
+  var preview = imgUpload.querySelector('.img-upload__preview').children[0];
   var form = imgUpload.querySelector('.img-upload__form');
   var uploadFileInput = form.querySelector('.img-upload__input');
   var overlay = form.querySelector('.img-upload__overlay');
@@ -16,6 +20,7 @@
   var scaleBiggerBtn = scaleField.querySelector('.scale__control--bigger');
   var scaleValueInput = scaleField.querySelector('.scale__control--value');
 
+
   var getScaleValue = function () {
     return window.util.convertProcentString(scaleValueInput.value);
   };
@@ -26,18 +31,17 @@
 
   var changeScaleEffect = function (scaleBigger) {
     var scaleValue = getScaleValue();
-    var scaleMultiplier = 25;
 
     if (scaleBigger && scaleValue < 100) {
-      scaleValue += scaleMultiplier;
+      scaleValue += SCALE_MULTIPLIER;
     }
 
     if (scaleBigger === undefined && scaleValue > 0) {
-      scaleValue -= scaleMultiplier;
+      scaleValue -= SCALE_MULTIPLIER;
     }
 
     scaleValueInput.value = scaleValue + '%';
-    window.uploadEffects.effectPreview.style.transform = 'scale' + '(' + scaleValue / 100 + ')';
+    preview.style.transform = 'scale' + '(' + scaleValue / 100 + ')';
   };
 
   var onScaleSmallerBtnClick = function () {
@@ -56,14 +60,12 @@
   };
 
   var onHashtagInputInput = function () {
-    var minHashtagLength = 2;
-    var maxHashtagLength = 20;
     var hashtagsList = getHashtagsList();
     var repeatedHashtags = false;
 
     for (var i = 0; i < hashtagsList.length; i++) {
-      var hashtagLessThanSpecified = hashtagsList[i].length < minHashtagLength;
-      var hashtegMoreThenSpecified = hashtagsList[i].length > maxHashtagLength;
+      var hashtagLessThanSpecified = hashtagsList[i].length < MIN_HASHTAG_LENGTH;
+      var hashtegMoreThenSpecified = hashtagsList[i].length > MAX_HASHTAG_LENGTH;
       var missedOctothorpe = hashtagsList[i][0] !== '#';
 
       for (var j = 0; j < hashtagsList.length; j++) {
@@ -114,9 +116,9 @@
     window.uploadEffects.effectsRadio[0].checked = true;
     uploadFileInput.value = null;
 
-    for (var i = 0; i < textInputs.children.length; i++) {
-      textInputs.children[i].value = null;
-    }
+    textInputs.children.forEach(function (input) {
+      input.value = null;
+    });
   };
 
   var onSumbitSuccess = function () {
@@ -133,13 +135,33 @@
     window.xhrRequest('POST', 'https://js.dump.academy/kekstagram', onSumbitSuccess, onSubmitError, new FormData(form));
   };
 
+  var onUploadFileInputChange = function () {
+    var file = uploadFileInput.files[0];
+    var fileName = file.name.toLowerCase();
+
+    var matches = window.util.PICTURE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        preview.src = reader.result;
+      });
+
+      reader.readAsDataURL(file);
+    }
+
+    window.setOpenCloseLogic(overlay, [hashtagInput, commentInput], true);
+  };
+
   resetScaleValue();
   scaleSmallerBtn.addEventListener('click', onScaleSmallerBtnClick);
   scaleBiggerBtn.addEventListener('click', onScaleBiggerBtnClick);
 
-  uploadFileInput.addEventListener('change', function () {
-    window.setOpenCloseLogic(overlay, [hashtagInput, commentInput], true);
-  });
+  uploadFileInput.addEventListener('change', onUploadFileInputChange);
+
 
   cancelBtn.addEventListener('click', function () {
     uploadFileInput.value = null;
@@ -158,6 +180,7 @@
   });
 
   window.imgUpload = {
+    preview: preview,
     resetScaleValue: resetScaleValue,
     uploadFileInput: uploadFileInput,
     overlay: overlay,
