@@ -2,6 +2,8 @@
 
 (function () {
   var ESC_KEYCODE = 27;
+  var ENTER_KEYCODE = 13;
+  var PICTURE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
   var getRandomNumber = function (maxNumber) {
     return Math.floor(Math.random() * maxNumber);
@@ -33,32 +35,6 @@
     }
   };
 
-  var setOpenCloseLogic = function (element, popupClosed) {
-    var openPopup = function () {
-      element.classList.remove('hidden');
-
-      document.addEventListener('keydown', onPopupEscPress);
-    };
-
-    var closePopup = function () {
-      element.classList.add('hidden');
-
-      document.removeEventListener('keydown', onPopupEscPress);
-    };
-
-    var onPopupEscPress = function (evt) {
-      if (evt.keyCode === ESC_KEYCODE) {
-        closePopup(element);
-      }
-    };
-
-    if (popupClosed) {
-      return openPopup();
-    } else {
-      return closePopup();
-    }
-  };
-
   var convertProcentString = function (procent) {
     return Number(procent.slice(0, -1));
   };
@@ -78,7 +54,7 @@
       document.removeEventListener('keydown', closeNotifyOnEsc);
 
       if (itSubmitError) {
-        window.imgUpload.imgUploadOverlay.classList.remove('hidden');
+        window.imgUpload.overlay.classList.remove('hidden');
       }
     };
 
@@ -96,16 +72,35 @@
     return setListeners();
   };
 
+  var setVisabilityForElements = function (elements, hide) {
+    var hideElements = function () {
+      elements.forEach(function (element) {
+        element.classList.add('visually-hidden');
+      });
+    };
+
+    var showElements = function () {
+      elements.forEach(function (element) {
+        element.classList.remove('visually-hidden');
+      });
+    };
+
+    var result = hide ? hideElements() : showElements();
+
+    return result;
+  };
   window.util = {
+    PICTURE_TYPES: PICTURE_TYPES,
     ESC_KEYCODE: ESC_KEYCODE,
+    ENTER_KEYCODE: ENTER_KEYCODE,
     getRandomNumber: getRandomNumber,
     getRandomArbitrary: getRandomArbitrary,
     shuffleArray: shuffleArray,
     setInputValidityAttributs: setInputValidityAttributs,
-    setOpenCloseLogic: setOpenCloseLogic,
     convertProcentString: convertProcentString,
     convertPxString: convertPxString,
     delElement: delElement,
     setNotifyLogic: setNotifyLogic,
+    setVisabilityForElements: setVisabilityForElements,
   };
 })();
