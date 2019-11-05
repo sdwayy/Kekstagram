@@ -11,50 +11,63 @@
   var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
   var effectsRadio = window.imgUpload.form.querySelectorAll('.effects__radio');
   var effectPreview = window.imgUpload.preview;
+  var effectName;
 
-  var setFilterStyle = function (effectValue) {
-    var effectName;
-    var blurValue = effectValue / BLUR_MULTIPLIER + 'px';
-    var brightnessValue = BRIGHTNESS_START_POINT + effectValue / BRIGHTNESS_MULTIPLIER;
 
-    var setEffect = function () {
-      for (var i = 0; i < effectsRadio.length; i++) {
-        switch (document.activeElement) {
-          case effectsRadio[1]:
-            effectName = 'grayscale';
-            break;
+  var getEffectValue = function (effectValue) {
+    switch (effectName) {
+      case 'blur':
 
-          case effectsRadio[2]:
-            effectName = 'sepia';
-            break;
-
-          case effectsRadio[3]:
-            effectName = 'invert';
-            break;
-
-          case effectsRadio[4]:
-            effectName = 'blur';
-
-            if (effectValue > 0) {
-              effectValue = blurValue;
-            }
-
-            break;
-
-          case effectsRadio[5]:
-            effectName = 'brightness';
-            effectValue = brightnessValue;
-            break;
-
-          default:
-            effectPreview.removeAttribute('style');
+        if (effectValue > 0) {
+          effectValue = effectValue / BLUR_MULTIPLIER + 'px';
         }
-      }
-    };
+
+        break;
+
+      case 'brightness':
+        effectValue = BRIGHTNESS_START_POINT + effectValue / BRIGHTNESS_MULTIPLIER;
+        break;
+
+      default:
+        effectValue = effectValue;
+    }
 
     effectValue /= 100;
-    setEffect();
-    effectPreview.style.filter = effectName + '(' + effectValue + ')';
+
+    return effectValue;
+  };
+
+  var getEffectName = function (target) {
+    switch (target) {
+      case effectsRadio[1]:
+        effectName = 'grayscale';
+        break;
+
+      case effectsRadio[2]:
+        effectName = 'sepia';
+        break;
+
+      case effectsRadio[3]:
+        effectName = 'invert';
+        break;
+
+      case effectsRadio[4]:
+        effectName = 'blur';
+        break;
+
+      case effectsRadio[5]:
+        effectName = 'brightness';
+        break;
+
+      default:
+        effectName = '';
+    }
+
+    return effectName;
+  };
+
+  var setEffect = function (effectValue) {
+    effectPreview.style.filter = effectName + '(' + getEffectValue(effectValue) + ')';
   };
 
   var resetSlider = function () {
@@ -72,9 +85,9 @@
       effectLevel.classList.add('hidden');
     }
 
+    getEffectName(target);
     window.imgUpload.resetScaleValue();
     resetSlider();
-    setFilterStyle();
   };
 
   var onPinMouseDown = function (evt) {
@@ -90,14 +103,21 @@
 
       var pinMoveEndPosition = effectLevelPin.offsetLeft;
       var shift = xCoords - moveEvt.clientX;
-      var effectProcent = Math.round(window.util.convertProcentString(effectLevelDepth.style.width));
 
-      if (pinMoveEndPosition >= 0 && pinMoveEndPosition <= effectLevelLineWidth) {
+      var effectProcent = Math.round(
+          window.util.convertProcentString(effectLevelDepth.style.width)
+      );
+
+      if (pinMoveEndPosition >= 0 &&
+          pinMoveEndPosition <= effectLevelLineWidth) {
+
         var pinShift = pinStartPosition - (shift);
 
         if (pinShift > effectLevelLineWidth) {
-          effectLevelPin.style.left = effectLevelLineWidth + 'px';
-        } else if (pinShift < effectLevelLineWidth && pinShift > 0) {
+          effectLevelPin.style.left =
+            effectLevelLineWidth + 'px';
+        } else if (pinShift < effectLevelLineWidth &&
+          pinShift > 0) {
           effectLevelPin.style.left = pinShift + 'px';
         } else {
           effectLevelPin.style.left = 0 + 'px';
@@ -106,7 +126,7 @@
 
       effectLevelDepth.style.width = effectLevelPin.offsetLeft / percent + '%';
 
-      setFilterStyle(effectProcent);
+      setEffect(effectProcent);
     };
 
     var onPinMouseUp = function () {
