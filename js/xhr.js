@@ -13,32 +13,29 @@
         }
       } catch (err) {
         var errorDescription;
-        var errorText = 'Ошибка ' + xhr.status + ':';
+        var errorText = 'Ошибка ' + xhr.status + ': ' + errorDescription;
 
         switch (xhr.status) {
           case 400:
-            errorDescription = errorText + ' Некорректные данные';
+            errorDescription = 'Некорректные данные';
             break;
 
           case 401:
-            errorDescription = errorText + ' Пользователь не авторизован';
+            errorDescription = 'Пользователь не авторизован';
             break;
 
           case 404:
-            errorDescription = errorText + ' Некорректный запрос';
+            errorDescription = 'Некорректный запрос';
             break;
 
           case 522:
-            errorDescription = errorText + ' Превышено время ожидания';
+            errorDescription = 'Превышено время ожидания';
             break;
 
           default:
-            errorDescription = 'Что-то пошло не так. Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText;
+            errorDescription = 'Что-то пошло не так';
         }
-
-        if (errorDescription !== undefined) {
-          onError(errorDescription);
-        }
+        onError(errorText);
       }
     };
 

@@ -89,6 +89,11 @@
 
     return result;
   };
+
+  var setCustomValidityMessage = function (element, message) {
+    element.setCustomValidity(message);
+  };
+
   window.util = {
     PICTURE_TYPES: PICTURE_TYPES,
     ESC_KEYCODE: ESC_KEYCODE,
@@ -102,5 +107,6 @@
     delElement: delElement,
     setNotifyLogic: setNotifyLogic,
     setVisabilityForElements: setVisabilityForElements,
+    setCustomValidityMessage: setCustomValidityMessage,
   };
 })();

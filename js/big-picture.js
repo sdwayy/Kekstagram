@@ -32,7 +32,8 @@
   };
 
   var generateCommentCountMessage = function () {
-    socialCommentCount.textContent = commentsCount + ' из ' + totalComments + ' комментaриев';
+    socialCommentCount.textContent =
+      commentsCount + ' из ' + totalComments + ' комментaриев';
   };
 
   var makeData = function (object) {
@@ -45,12 +46,12 @@
     socialComments.innerHTML = '';
 
     if (totalComments < COMMENTS_LOADER_MULTIPLIER) {
-      // Если комментариев <5 скрываем лишнее и показываем все комментарии
       hideUndueInterface();
       renderComments(photoObject, 0, totalComments);
     } else {
-      // Иначе показываем все детали интерфейса и показываем первые 5 комментариев
-      window.util.setVisabilityForElements([commentsLoader, socialCommentCount]);
+      window.util.setVisabilityForElements([
+        commentsLoader, socialCommentCount
+      ]);
 
       renderComments(photoObject, 0, COMMENTS_LOADER_MULTIPLIER);
 
@@ -62,7 +63,11 @@
 
   var onCommentsLoaderClick = function () {
     if (commentsCount + COMMENTS_LOADER_MULTIPLIER < totalComments) {
-      renderComments(photoObject, commentsCount, commentsCount + COMMENTS_LOADER_MULTIPLIER);
+      renderComments(
+          photoObject,
+          commentsCount,
+          commentsCount + COMMENTS_LOADER_MULTIPLIER
+      );
     } else {
       hideUndueInterface();
       renderComments(photoObject, commentsCount, totalComments);
