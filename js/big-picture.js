@@ -82,10 +82,11 @@
       var comment = socialComment.cloneNode(true);
       var socialPicture = comment.querySelector('.social__picture');
       var socialText = comment.querySelector('.social__text');
+      var uniqueComment = object.comments[commentIndex];
 
-      socialPicture.src = object.comments[commentIndex].avatar;
-      socialPicture.alt = object.comments[commentIndex].name;
-      socialText.textContent = object.comments[commentIndex].message;
+      socialPicture.src = uniqueComment.avatar;
+      socialPicture.alt = uniqueComment.name;
+      socialText.textContent = uniqueComment.message;
 
       socialComments.appendChild(comment);
     };

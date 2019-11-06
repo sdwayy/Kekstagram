@@ -13,7 +13,6 @@
   var effectPreview = window.imgUpload.preview;
   var effectName;
 
-
   var getEffectValue = function (effectValue) {
     switch (effectName) {
       case 'blur':

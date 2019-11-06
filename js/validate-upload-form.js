@@ -56,7 +56,7 @@
         break;
 
       case repeatedHashtags:
-        message = 'Ой, такой уже был';
+        message = 'Ой, такой хэштег уже был';
         break;
 
       case tooLongInput:
