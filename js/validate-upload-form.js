@@ -92,5 +92,4 @@
 
   hashtagInput.addEventListener('invalid', onHashtagInputInvalid);
   hashtagInput.addEventListener('input', onHashtagInputInput);
-
 }());

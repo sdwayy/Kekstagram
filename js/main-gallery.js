@@ -104,10 +104,10 @@
 
     var currentTarget = evt.currentTarget;
     var currentImg = currentTarget.querySelector('img');
-    var photoId = currentImg.dataset.id;
-
+    //  Преобразовываем строку в число, т.к. === не осуществляет приведение типов
+    var photoId = Number(currentImg.dataset.id);
     window.mainGallery.photoObject = photosData.find(function (item) {
-      return item.id === +photoId;
+      return item.id === photoId;
     });
 
     window.bigPicture.makeData(window.mainGallery.photoObject);

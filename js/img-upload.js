@@ -21,12 +21,24 @@
       .children
   );
 
+  var resetUloadFileInputValue = function () {
+    uploadFileInput.value = null;
+  };
+
   var getScaleValue = function () {
     return window.util.convertProcentString(scaleValueInput.value);
   };
 
   var resetScaleValue = function () {
     scaleValueInput.value = DEFAULT_SCALE_VALUE;
+  };
+
+  var openOverlay = function () {
+    window.setOpenCloseLogic(overlay, textInputs, true, resetImgUploadValues, resetUloadFileInputValue);
+  };
+
+  var closeOverlay = function () {
+    window.setOpenCloseLogic(overlay, '', '', '', resetUloadFileInputValue);
   };
 
   var changeScaleEffect = function (scaleBigger) {
@@ -53,10 +65,10 @@
   };
 
   var resetImgUploadValues = function () {
-    overlay.classList.add('hidden');
+    resetScaleValue();
     window.uploadEffects.resetSlider();
     window.uploadEffects.effectsRadio[0].checked = true;
-    uploadFileInput.value = null;
+    window.uploadEffects.setVisibilityForSlider();
 
     textInputs.forEach(function (input) {
       input.value = null;
@@ -64,20 +76,22 @@
   };
 
   var onSumbitSuccess = function () {
-    resetImgUploadValues();
+    closeOverlay();
     window.renderSuccessWindow();
   };
 
   var onSubmitError = function (errorDescription) {
-    overlay.classList.add('hidden');
+    closeOverlay();
     window.renderError(errorDescription, 'submitError');
   };
 
-  var onFormSubmit = function () {
+  var onFormSubmit = function (evt) {
+    evt.preventDefault();
+
     window.xhrRequest('POST', 'https://js.dump.academy/kekstagram', onSumbitSuccess, onSubmitError, new FormData(form));
   };
 
-  var onUploadFileInputChange = function () {
+  var fileReader = function () {
     var file = uploadFileInput.files[0];
     var fileName = file.name.toLowerCase();
 
@@ -94,25 +108,27 @@
 
       reader.readAsDataURL(file);
     }
-
-    window.setOpenCloseLogic(overlay, textInputs, true);
+  };
+  //  Вызов при изменении инпута
+  var onUploadFileInputChange = function () {
+    //  Загружаем пользовательское фото
+    fileReader();
+    //  Открываем модальное окно
+    openOverlay();
   };
 
-  resetScaleValue();
+  var onCancelBtnClick = function () {
+    closeOverlay();
+  };
+
   scaleSmallerBtn.addEventListener('click', onScaleSmallerBtnClick);
   scaleBiggerBtn.addEventListener('click', onScaleBiggerBtnClick);
 
   uploadFileInput.addEventListener('change', onUploadFileInputChange);
 
-  cancelBtn.addEventListener('click', function () {
-    uploadFileInput.value = null;
-    window.setOpenCloseLogic(overlay);
-  });
+  cancelBtn.addEventListener('click', onCancelBtnClick);
 
-  form.addEventListener('submit', function (evt) {
-    evt.preventDefault();
-    onFormSubmit();
-  });
+  form.addEventListener('submit', onFormSubmit);
 
   window.imgUpload = {
     preview: preview,

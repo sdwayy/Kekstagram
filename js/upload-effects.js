@@ -75,16 +75,19 @@
     effectPreview.removeAttribute('style');
   };
 
+  var setVisibilityForSlider = function () {
+    if ((effectsRadio[0]).checked) {
+      effectLevel.classList.add('hidden');
+    } else {
+      effectLevel.classList.remove('hidden');
+    }
+  };
+
   var onEffectsItemClick = function (evt) {
     var target = evt.target;
 
-    if (target !== effectsRadio[0]) {
-      effectLevel.classList.remove('hidden');
-    } else {
-      effectLevel.classList.add('hidden');
-    }
-
     getEffectName(target);
+    setVisibilityForSlider();
     window.imgUpload.resetScaleValue();
     resetSlider();
   };
@@ -146,6 +149,7 @@
   resetSlider();
 
   window.uploadEffects = {
+    setVisibilityForSlider: setVisibilityForSlider,
     effectPreview: effectPreview,
     resetSlider: resetSlider,
     effectsRadio: effectsRadio,
