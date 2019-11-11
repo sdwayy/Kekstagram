@@ -25,6 +25,8 @@
     uploadFileInput.value = null;
   };
 
+  var openCloseLogic = new window.PopupLogic(overlay, textInputs, resetUloadFileInputValue);
+
   var getScaleValue = function () {
     return window.util.convertProcentString(scaleValueInput.value);
   };
@@ -33,12 +35,13 @@
     scaleValueInput.value = DEFAULT_SCALE_VALUE;
   };
 
-  var openOverlay = function () {
-    window.setOpenCloseLogic(overlay, textInputs, true, resetImgUploadValues, resetUloadFileInputValue);
+  var openPopup = function () {
+    resetImgUploadValues();
+    openCloseLogic.togglePopup();
   };
 
-  var closeOverlay = function () {
-    window.setOpenCloseLogic(overlay, '', '', '', resetUloadFileInputValue);
+  var closePopup = function () {
+    openCloseLogic.togglePopup();
   };
 
   var changeScaleEffect = function (scaleBigger) {
@@ -76,12 +79,12 @@
   };
 
   var onSumbitSuccess = function () {
-    closeOverlay();
+    closePopup();
     window.renderSuccessWindow();
   };
 
   var onSubmitError = function (errorDescription) {
-    closeOverlay();
+    closePopup();
     window.renderError(errorDescription, 'submitError');
   };
 
@@ -114,11 +117,11 @@
     //  Загружаем пользовательское фото
     fileReader();
     //  Открываем модальное окно
-    openOverlay();
+    openPopup();
   };
 
   var onCancelBtnClick = function () {
-    closeOverlay();
+    closePopup();
   };
 
   scaleSmallerBtn.addEventListener('click', onScaleSmallerBtnClick);

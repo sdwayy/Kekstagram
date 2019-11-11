@@ -94,10 +94,15 @@
     element.setCustomValidity(message);
   };
 
+  var isElementActive = function (element) {
+    return element === document.activeElement;
+  };
+
   window.util = {
     PICTURE_TYPES: PICTURE_TYPES,
     ESC_KEYCODE: ESC_KEYCODE,
     ENTER_KEYCODE: ENTER_KEYCODE,
+    isElementActive: isElementActive,
     getRandomNumber: getRandomNumber,
     getRandomArbitrary: getRandomArbitrary,
     shuffleArray: shuffleArray,

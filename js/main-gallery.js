@@ -112,11 +112,7 @@
 
     window.bigPicture.makeData(window.mainGallery.photoObject);
 
-    window.setOpenCloseLogic(
-        window.bigPicture.popup,
-        [window.bigPicture.commentInput],
-        true
-    );
+    window.bigPicture.togglePopup();
   };
 
   var deleteAddedPhotos = function () {

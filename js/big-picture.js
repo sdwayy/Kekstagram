@@ -18,6 +18,16 @@
   var totalComments;
   var commentsCount;
 
+  var reserCommentInputValue = function () {
+    commentInput.value = null;
+  };
+
+  var openCloseLogic = new window.PopupLogic(popup, [commentInput], reserCommentInputValue);
+
+  var togglePopup = function () {
+    openCloseLogic.togglePopup();
+  };
+
   var getCommentsCount = function () {
     return socialComments.children.length;
   };
@@ -98,14 +108,13 @@
 
   commentsLoader.addEventListener('click', onCommentsLoaderClick);
 
-  closeBtn.addEventListener('click', function () {
-    window.setOpenCloseLogic(popup);
-  });
+  closeBtn.addEventListener('click', togglePopup);
 
   commentInput.setAttribute('maxlength', '140');
 
   window.bigPicture = {
     popup: popup,
+    togglePopup: togglePopup,
     makeData: makeData,
     commentInput: commentInput,
   };

@@ -28,10 +28,8 @@
         break;
 
       default:
-        effectValue = effectValue;
+        effectValue /= 100;
     }
-
-    effectValue /= 100;
 
     return effectValue;
   };
