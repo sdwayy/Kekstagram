@@ -19,13 +19,6 @@
         !popupTextInputs.some(this.isTextInputActive)
       ) {
         this.togglePopup();
-      } else if (
-        evt.keyCode === window.util.ESC_KEYCODE &&
-        popupTextInputs.some(this.isTextInputActive)
-      ) {
-        popupTextInputs.forEach(function (textInput) {
-          textInput.blur();
-        });
       }
     };
 
