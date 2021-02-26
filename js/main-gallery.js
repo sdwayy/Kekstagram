@@ -129,7 +129,7 @@
 
   window.xhrRequest(
       'GET',
-      'https://js.dump.academy/kekstagram/data',
+      'https://22.javascript.pages.academy/kekstagram/data',
       onPhotosDataSuccess,
       onPhotosDataError
   );

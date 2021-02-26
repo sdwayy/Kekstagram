@@ -91,7 +91,7 @@
   var onFormSubmit = function (evt) {
     evt.preventDefault();
 
-    window.xhrRequest('POST', 'https://js.dump.academy/kekstagram', onSumbitSuccess, onSubmitError, new FormData(form));
+    window.xhrRequest('POST', 'https://22.javascript.pages.academy/kekstagram/', onSumbitSuccess, onSubmitError, new FormData(form));
   };
 
   var fileReader = function () {
@@ -126,11 +126,8 @@
 
   scaleSmallerBtn.addEventListener('click', onScaleSmallerBtnClick);
   scaleBiggerBtn.addEventListener('click', onScaleBiggerBtnClick);
-
   uploadFileInput.addEventListener('change', onUploadFileInputChange);
-
   cancelBtn.addEventListener('click', onCancelBtnClick);
-
   form.addEventListener('submit', onFormSubmit);
 
   window.imgUpload = {
