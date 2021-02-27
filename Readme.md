@@ -1,4 +1,9 @@
-# Личный проект «Кекстаграм»
+# Kekstagram
 
-* Студент: [Даниил Пугачев](https://up.htmlacademy.ru/javascript/18/user/946663).
-* Наставник: [Алексей Вечканов](https://htmlacademy.ru/profile/id902303).
+> [Preview link](https://sdwayy.github.io/Kekstagram/)
+
+## Stack:
+    vanilla JS (ES5), AJAX, eslint.
+---
+## Основные команды для работы
+* *Запуск тестирования на соответствия код-гайдам* - `npm test`
